@@ -13,7 +13,7 @@ const int MAX_MATRIX_HEIGHT = 1000;
 const int MAX_MATRIX_WIDTH = 1000;
 
 //definition of the matrix as a collapsed 2d array
-struct Matrix{
+struct matrix{
     int width;
     int height;
     int data[MAX_MATRIX_HEIGHT * MAX_MATRIX_WIDTH];

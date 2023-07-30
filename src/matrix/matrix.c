@@ -1,3 +1,3 @@
-//implementations of Matrix.h
+//implementations of matrix.h
 
-#include "Matrix.h"
+#include "matrix.h"
