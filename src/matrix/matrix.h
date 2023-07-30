@@ -8,16 +8,19 @@
  *written August 2023
 */
 
-//maximum dimensions for the array, can be adjusted if needed
+//constants
 const int MAX_MATRIX_HEIGHT = 1000;
 const int MAX_MATRIX_WIDTH = 1000;
 
-//definition of the matrix as a collapsed 2d array
+//type definition
 struct matrix{
     int width;
     int height;
     int data[MAX_MATRIX_HEIGHT * MAX_MATRIX_WIDTH];
 };
+
+//function prototypes
+
 
 #endif
 
