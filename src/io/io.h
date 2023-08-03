@@ -1,9 +1,11 @@
 #ifndef __IO_H__
 #define __IO_H__
 
-#include <stdio.h>
-#include <stdbool.h>
+#include "../main.h"
+#include "../objs.h"
+#include "string.h"
 // constants
+#define BUFFERSIZE 2000 // Read lines of 1000 with spaces in between
 
 // type definitions
 
@@ -11,16 +13,16 @@
 extern bool file_opened; // true if file is open
 extern bool file_closed; // true if file is closed
 extern bool print_mode; // true for print to file
-extern FILE *buffptr;   // pointer for the buffer
+extern FILE *fptr;   // pointer for file
 extern char buffer;
 
 // function prototype for functions 
 // file handling
-void open_file(FILE *f);
-void close_file(FILE *f);
-void read(FILE *f);
-void print();
-void print_to_file(FILE *f);
+int open_file(char* fname);
+int close_file(char* fname);
+int read_file(char* fname);
+int print_file(char* fname);
+int print_to_file(char* fname);
 void print_to_system();
 
 
