@@ -1,4 +1,6 @@
-#include "matrix.h"
+#include "matrix/matrix.h"
+#include "io/io.h"
+#include "main.h"
 
 //implementations of matrix.h
 
