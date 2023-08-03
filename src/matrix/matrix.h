@@ -1,6 +1,8 @@
 #ifndef MATRIX_H
 #define MATRIX_H
 
+//mayhaps a merge fixer?
+
 /*Matrix.h
  *Matrix interface and implementation written by Owen Davis 
  *for some research that Derik is doing lol
