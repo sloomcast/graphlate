@@ -1,7 +1,7 @@
 #ifndef __IO_H__
 #define __IO_H__
 
-#include "main.h"
+#include "src/main.h"
 #include "string.h"
 // constants
 #define BUFFERSIZE 2000 // Read lines of 1000 with spaces in between

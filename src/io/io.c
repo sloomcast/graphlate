@@ -1,5 +1,5 @@
 #include "io.h"
-#include "main.h"
+#include "src/main.h"
 
 // Open the file for writing
 int open_file(char* fname){
