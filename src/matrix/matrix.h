@@ -12,13 +12,14 @@
 //constants
 #define MAX_WIDTH 500
 #define MAX_HEIGHT 500
+//#define RAND_MAX 1024
 
 //type definition
 struct matrix{
     int width;
     int height;
-    int *allocp;
-    int data[MAX_HEIGHT * MAX_WIDTH];
+    double *allocp;
+    double data[MAX_HEIGHT * MAX_WIDTH];
 };
 
 //function prototypes
@@ -42,11 +43,24 @@ int matrix_height(struct matrix *mat);
 //          0 < width && width <= MAX_WIDTH
 //          0 < height && height <= MAX_HEIGHT
 //EFFECTS: returns a pointer to the value at row, col
-int* matrix_at(struct matrix *mat, int row, int col);
+double* matrix_at(struct matrix *mat, int row, int col);
 
 //REQUIRES: mat points to a valid matrix
 //MODIFIES: *mat
 //EFFECTS:  fills *mat with 0s as an empty matrix
 void matrix_fill_empty(struct matrix *mat);
+
+//REQUIRES: width <= MAX_WIDTH
+//          height <= MAX_HEIGHT
+//EFFECTS:  returns a pointer to a matrix of the designated size filled with random integers
+struct matrix* random_matrix(int width, int height, int param);
+
+//REQUIRES: 1 <= param <=4
+//EFFECTS:  returns a random double based on the given input
+//          1: rational number
+//          2: irrational number
+//          3: integer
+//          4: natural number
+double rand_num(int param);
 
 #endif 

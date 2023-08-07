@@ -1,7 +1,7 @@
 #include <getopt.h>
 #include "main.h"
-//#include "io/io.h"
-//#include "matrix/matrix.h"
+// #include "src/io/io.h"
+// #include "src/matrix/matrix.h"
 
 /*  TITLE:          Main
     DESCRIPTION:    Handles calls to compiled .o file
