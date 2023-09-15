@@ -8,7 +8,7 @@
 
 using namespace std;
 
-const int MAX_DIMENSION = 10;
+const int MAX_DIMENSION = 100;
 
 template <typename T>
 class Matrix{
@@ -111,7 +111,7 @@ class Matrix{
 
     protected:
     int dimensions;
-    T data[MAX_DIMENSION];
+    T data[MAX_DIMENSION*MAX_DIMENSION];
 };
 
 #endif
