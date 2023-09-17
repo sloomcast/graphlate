@@ -7,6 +7,7 @@
 #include <list>
 #include "randos.h"
 #include "meme.h"
+#include "maths.h"
 
 using namespace std;
 
@@ -154,4 +155,63 @@ class Matrix{
     T data[MAX_DIMENSION*MAX_DIMENSION];
 };
 
+
+// BASIC, BAD, TYPE-SPECIFIC
+void print_eq(Matrix<int> matrix_1, Matrix<int> matrix_2, Matrix<int> result) {
+    int size1 = matrix_1.matrix_dimension();
+    int size2 = matrix_2.matrix_dimension();
+    int size3 = result.matrix_dimension();
+
+    if(size1 != size2 || size1 != size3 || size2 !=size3){  //Currently only working with square matrices, will only use size1 after this
+        printf("BAD. DON'T. STOP.\n");
+        return;
+    }
+
+    // Print each line top to bottom
+    for (int j=0; j<size1; j++) {                    
+        for(int k=0; k<size1; k++)//Print each value in the jth row for Matrix 1
+        {
+            printf(" %d ",*matrix_1.matrix_at(j,k));
+        }
+        
+        //If it's in the right spot, print a multiplication symbol
+        if(j == size1/2)
+        {
+            printf("\tX\t");
+        }
+        else //Else, don't
+        {
+            printf("\t\t");
+        }
+    
+        //Print each value in the jth row for for Matrix 2
+        for(int k=0; k<size1; k++)
+        {
+           printf(" %d ",*matrix_2.matrix_at(j,k));
+        }
+    
+        //If it's in the right spot, print the equals symbol
+        if(j == size1/2)
+        {
+            printf("\t=\t");
+        }
+        else//Otherwise, don't
+        {
+            printf("\t\t");
+        }
+
+        //Print each value in the jth row for the result matrix
+        for(int k=0; k<size1; k++)
+        {
+            printf(" %d ",*result.matrix_at(j,k));
+        }
+        printf("\n");
+    }
+};
+
+// BASIC, BAD, TYPE-SPECIFIC, MEME
+Matrix<int> mat_mult(Matrix<int> matrix_1, Matrix<int> matrix_2) {
+    Matrix<int> matrix(3,1);
+    return matrix;
+}
 #endif

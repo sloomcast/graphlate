@@ -3,18 +3,16 @@
 using namespace std;
 
 // Testing functions
-bool print_mat(Matrix<int> matrix_1);
+bool print_mat();
 bool rands();
 bool mults();
 
 // Global matrices because I'm lazy
 
 int main(){
-    Matrix<int> matrix_1;
-    Matrix<int> matrix_2;
 
     cout << "Test 1: Printing Functions" << endl;
-    if(print_mat(matrix_1)){
+    if(print_mat()){
         cout << "Printed matrices" << endl;
     } else{
         cout << "Failed to print matrices" << endl;
@@ -26,18 +24,29 @@ int main(){
     } else {
         cout << "Constructor tests failed." << endl;
     }
+
+    cout << "Test 3: Multiplication" << endl;
+    if(mults()) {
+        cout << "Mults passed." << endl;
+    } else {
+        cout << "Mults failed." << endl;
+    }
 }
 
-bool print_mat(Matrix<int> matrix_1,Matrix<int> matrix_2){
-    try
-    {
-        matrix_1.print();
-        matrix_2.print();
-    }
-    catch(const std::exception& e)
-    {
-        std::cerr << e.what() << '\n';
-        return false;
+bool print_mat(){
+    int arr[4] = {2,4,6,8};
+    for(int size: arr) {
+        try
+        {
+            printf("Matrix %d: %dX%d\n",size,size,size);
+            Matrix<int> matrix(size,4);
+            matrix.print();
+        }
+        catch(const std::exception& e)
+        {
+            std::cerr << e.what() << '\n';
+            return false;
+        }
     }
     return true;
 }
@@ -75,5 +84,19 @@ bool rands() {
 }
 
 bool mults() {
+    Matrix<int> matrix_1(3,1);
+    Matrix<int> matrix_2(3,1);
+    Matrix<int> matrix_3(3,1);
 
+    try
+    {
+        print_eq(matrix_1,matrix_2,matrix_3);
+    }
+    catch(const std::exception& e)
+    {
+        std::cerr << e.what() << '\n';
+        return false;
+    }
+    
+    return true;
 }
