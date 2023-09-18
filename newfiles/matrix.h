@@ -17,9 +17,9 @@ bool debug_flag = false;
 template <typename T>
 class Matrix{
     public:
-    Matrix(int size){
-        dimensions = size;
-    }
+    // Matrix(int size){
+    //     dimensions = size;
+    // }
 
     // Constructor to create a random matrix of specified flavor
     // Flavors: 1 - Random rationals
@@ -28,15 +28,15 @@ class Matrix{
     //          4 - Random natural numbers
     //          5 - Meme
     //          6 - Complete graphs
-    Matrix(int size, int flavor) {
+    Matrix(int size = 10, int flavor = 5) { //defaults to meme flavor
         dimensions = size;
         this->fill_by_option(flavor);
     }
     //default constructor
-    Matrix(){
-        dimensions = 10;
-        this->fill_by_option(5); //default to meme flavor
-    }
+    // Matrix(){
+    //     dimensions = 10;
+    //     this->fill_by_option(5); //default to meme flavor
+    // }
 
     //EFFECTS:  returns the width/height of the matrix
     int matrix_dimension(){
@@ -84,9 +84,11 @@ class Matrix{
     void print(ofstream *os){
         for(int i=0; i<dimensions; ++i){
             for(int j=0; j<dimensions; ++j){
-                *os << matrix_at(i,j);
+                *os << *matrix_at(i,j) << " ";
             }
+            cout << endl;
         }
+        cout << endl << endl;
     }
 
     //REQUIRES: f_out is the name of an existing file or a file to be created
@@ -99,9 +101,11 @@ class Matrix{
 
         for(int i=0; i<dimensions; ++i){
             for(int j=0; j<dimensions; ++j){
-                of << matrix_at(i,j);
+                of << *matrix_at(i,j) << " ";
             }
+            cout << endl;
         }
+        cout << endl << endl;
     }
 
     //EFFECTS:  prints the matrix to stdout
@@ -115,7 +119,7 @@ class Matrix{
         cout << endl << endl;
     }
 
-    //REQUIRES: option is and integer 1-5 corresponding to the desired fill type
+    //REQUIRES: option is an integer 1-5 corresponding to the desired fill type
     //MODIFIES: the matrix object the method is called on
     //EFFECTS:  fills the matrix with the specified flavor of fill
     //          1: random rational number

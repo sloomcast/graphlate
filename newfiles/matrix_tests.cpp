@@ -54,7 +54,6 @@ bool make_tests(){
     Matrix<int> m1;
     Matrix<int> m2(5);
     Matrix<float> m3;
-    Matrix<string> lmfao;
 
     if(m1.matrix_dimension() != 10) return false;
     if(m2.matrix_dimension() != 5) return false;
