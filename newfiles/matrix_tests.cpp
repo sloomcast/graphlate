@@ -11,65 +11,120 @@ bool rand_tests();
 
 int main(){
     cout << "hello bitch\n";
+    bool all_pass = true;
 
     //make a matrix
     if(make_tests()){
-        cout << "MAKING TESTS PASSED\n";
+        cout << "MAKING TESTS PASSED\n\n";
     }
-    else cout << "MAKING TESTS FAILED YOU IDIOT\n";
+    else{ 
+        cout << "MAKING TESTS FAILED YOU IDIOT\n\n";
+        all_pass = false;
+    }
 
     //test matrix_at
     if(at_tests()){
-        cout << "AT TESTS PASSED\n";
+        cout << "AT TESTS PASSED\n\n";
     }
-    else cout << "AT TESTS FAILED YOU IDIOT\n";
+    else{
+        cout << "AT TESTS FAILED YOU IDIOT\n\n";
+        all_pass = false;
+    }
 
     //test return row
     if(row_tests()){
-        cout << "ROW TESTS PASSED\n";
+        cout << "ROW TESTS PASSED\n\n";
     }
-    else cout << "ROW TESTS FAILED YOU IDIOT\n";
+    else{
+        cout << "ROW TESTS FAILED YOU IDIOT\n\n";
+        all_pass = false;
+    }
 
     //test return column
     if(col_tests()){
-        cout << "COL TESTS PASSED";
+        cout << "COL TESTS PASSED\n\n";
     }
-    else cout << "COL TESTS FAILED YOU IDIOT\n";
+    else{
+        cout << "COL TESTS FAILED YOU IDIOT\n\n";
+        all_pass = false;
+    }
 
     //test print
     if(print_tests()){
-        cout << "PRINT TESTS PASSED\n";
+        cout << "PRINT TESTS PASSED\n\n";
     }
-    else cout << "PRINT TESTS FAILED YOU IDIOT\n";
+    else{
+        cout << "PRINT TESTS FAILED YOU IDIOT\n\n";
+        all_pass - false;
+    }
 
     //test random fill
     if(rand_tests()){
-        cout << "RANDOM GENERATION TESTS PASSED\n";
+        cout << "RANDOM GENERATION TESTS PASSED\n\n";
     }
-    else cout << "RANDOM GENERATION TESTS FAILED YOU IDIOT\n";
+    else{
+        cout << "RANDOM GENERATION TESTS FAILED YOU IDIOT\n\n";
+        all_pass = false;
+    }
+
+    if(all_pass) cout << "ALL TESTS PASSED\n\n";
+    else cout << "NOT ALL PASSED\n\n";
     return 0;
 }
 
 bool make_tests(){
     Matrix<int> m1;
     Matrix<int> m2(5);
-    Matrix<float> m3;
+    Matrix<float> m3(5,1);
 
     if(m1.matrix_dimension() != 10) return false;
     if(m2.matrix_dimension() != 5) return false;
+
+    //cout << typeid(*m3.matrix_at(0,0)).name() << endl;
+    //m1.print();
 
     return true;
 }
 
 bool at_tests(){
+    Matrix<float> m1;
+    Matrix<int> m2;
+
+    if(*m1.matrix_at(0,0) != 3.0) return false;
+    if(*m2.matrix_at(2,3) != 4) return false;
+
+
     return true;
 }
 
 bool row_tests(){
+    list<int> l1{5,8,9,7,9,3,2,3,8,4};
+    list<int> l2{1,6,9,3,9,9,3,7,5,0};
+    Matrix<int> m1;
+
+    //m1.print();
+    if(l1 != m1.return_row(1)) return false;
+    if(l2 != m1.return_row(9)) return false;
+    // for(auto i : l1){
+    //     cout << i << " ";
+    // }
+    // cout << endl;
+    // for(auto i : m1.return_row(1)){
+    //     cout << i << " ";
+    // }
+    // cout << endl;
+
     return true;
 }
 
 bool col_tests(){
+    Matrix<int> m1;
+    list<int> l1{1,8,2,5,6,1,8,2,5,6};
+    list<int> l2{3,4,7,7,0,3,4,7,7,0};
+
+    if(l1 != m1.return_col(1)) return false;
+    if(l2 != m1.return_col(9)) return false;
+
     return true;
 }
 

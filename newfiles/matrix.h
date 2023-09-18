@@ -5,6 +5,7 @@
 #include <fstream>
 #include <string>
 #include <list>
+#include <typeinfo>
 #include "randos.h"
 #include "meme.h"
 #include "maths.h"
@@ -58,7 +59,7 @@ class Matrix{
 
         //add to list
         for(int i=0; i<dimensions; ++i){
-            to_return.push_front(matrix_at(row, i));
+            to_return.push_back(*matrix_at(row, i));
         }
 
         return to_return;
@@ -72,7 +73,7 @@ class Matrix{
 
         //add to list
         for(int i=0; i<dimensions; ++i){
-            to_return.push_front(matrix_at(i,col));
+            to_return.push_back(*matrix_at(i,col));
         }
 
         return to_return;
@@ -81,10 +82,10 @@ class Matrix{
     //REQUIRES: os is a valid output stream capable of being written to
     //MODIFIES: the file specified in os
     //EFFECTS:  prints the matrix object to os
-    void print(ofstream *os){
+    void print(ofstream &os){
         for(int i=0; i<dimensions; ++i){
             for(int j=0; j<dimensions; ++j){
-                *os << *matrix_at(i,j) << " ";
+                os << *matrix_at(i,j) << " ";
             }
             cout << endl;
         }
