@@ -9,6 +9,7 @@ bool col_tests();
 bool print_tests();
 bool rand_tests();
 bool operator_tests();
+void test_errors();
 
 int main(){
     cout << "hello bitch\n";
@@ -76,6 +77,9 @@ int main(){
         cout << "RANDOM GENERATION TESTS FAILED YOU IDIOT\n\n";
         all_pass = false;
     }
+
+    //error testing
+    test_errors();
 
     if(all_pass) cout << "ALL TESTS PASSED\n\n";
     else cout << "NOT ALL PASSED\n\n";
@@ -172,6 +176,55 @@ bool operator_tests(){
     return true;
 }
 
+void test_errors(){
+    try{
+        Matrix<int> m1;
+        int test = *m1.matrix_at(1,13);
+
+        m1.print();
+    }
+    catch(std::exception& e){
+        std::cerr << e.what() << "\n\n";
+    }
+
+    try{
+        Matrix<int> m1;
+        ofstream of;
+
+        m1.print(of);
+    }
+    catch(std::exception& e){
+        cerr << e.what() << "\n\n";
+    }
+
+    try{
+        Matrix<int> m1{1,2};
+    }
+    catch(std::exception& e){
+        cerr << e.what() << "\n\n";
+    }
+}
+
 bool rand_tests(){
+    //option 1, rationals
+    Matrix<float> m1(5,1);
+    Matrix<float> m2(5,1);
+    if(m2 == m1) return false;
+
+    //option 2, irrationals
+    Matrix<float> m7(5,2);
+    Matrix<float> m8(5,2);
+    if(m7 == m8) return false;
+
+    //option 3, integers
+    Matrix<int> m3(5,3);
+    Matrix<int> m4(5,3);
+    if(m3 == m4)return false;
+
+    //option 4, natural numbers
+    Matrix<int> m5(5,4);
+    Matrix<int> m6(5,4);
+    if(m5 == m6) return false;
+
     return true;
 }

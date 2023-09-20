@@ -28,6 +28,9 @@ class Matrix{
     //          5 - Meme
     //          6 - Complete graphs
     Matrix(int size = 10, int flavor = 5) { //defaults to meme flavor
+        //error handling
+        if(flavor < 1 || flavor > 6)throw std::invalid_argument("ERROR: Please enter a matrix fill designation between 1-5");
+
         dimensions = size;
         this->fill_by_option(flavor);
     }
@@ -36,7 +39,7 @@ class Matrix{
         //add assert to make sure it's a square matrix
         double s1 = sqrt(il.size());
         int s2 = sqrt(il.size());
-        assert(double(s2) == s1);
+        if(double(s2) != s1) throw std::invalid_argument("ERROR: Initializer list must be a 1D square matrix");
 
         dimensions = sqrt(il.size());  //set size
 
@@ -55,6 +58,10 @@ class Matrix{
     //REQUIRES: 0 <= row,col <= dimensions
     //EFFECTS:  returns by reference the value stored at row,col
     T* matrix_at(int row, int col){
+        //error handling
+        if(row < 0 || row > dimensions) throw std::invalid_argument("ERROR: Invalid row value");
+        if(col < 0 || col > dimensions) throw std::invalid_argument("ERROR: Invalid column value");
+
         int index = row*dimensions + col;
         return &data[index];
     }
@@ -62,6 +69,9 @@ class Matrix{
     //REQUIRES: 0 <= row <= dimensions
     //EFFECTS:  returns by reference the row at row
     list<T> return_row(int row) {
+        //error handling
+        if(row < 0 || row > dimensions) throw std::invalid_argument("ERROR: Invalid row value");
+
         //make list
         list<T> to_return;
 
@@ -76,6 +86,9 @@ class Matrix{
     //REQUIRES: 0 <= col <= dimensions
     //EFFECTS:  returns by reference the column at col
     list<T> return_col(int col) {
+        //error handling
+        if(col < 0 || col > dimensions) throw std::invalid_argument("ERROR: Invalid column value");
+
         //make list
         list<T> to_return;
 
@@ -93,6 +106,9 @@ class Matrix{
     //NOTE:     if the ofstream passed to the print function is not in append mode
     //          the function WILL OVERWRITE any existing contents in the corresponding file
     void print(ofstream &os) {
+        //error handling
+        if(!os.is_open()) throw std::invalid_argument("ERROR: Please input a valid ofstream to print to");
+
         for(int i=0; i<dimensions; ++i){
             for(int j=0; j<dimensions; ++j){
                 os << *matrix_at(i,j) << " ";
@@ -106,9 +122,13 @@ class Matrix{
     //MODIFIES: the file specified in f_out
     //EFFECTS:  opens the file f_out or creates a new file and prints the matrix to it
     void print(string f_out) {
+        //error handling
+        if(f_out == "") throw std::invalid_argument("ERROR: Please input a valid filename");
+
         //creates stream
         ofstream of;
         of.open(f_out, ios::app);
+        if(!of.is_open()) throw std::invalid_argument("ERROR: Encountered an issue opening file" + f_out);
 
         for(int i=0; i<dimensions; ++i){
             for(int j=0; j<dimensions; ++j){
@@ -149,7 +169,7 @@ class Matrix{
         return !(*this == rhs);
     }
 
-    //REQUIRES: option is an integer 1-5 corresponding to the desired fill type
+    //REQUIRES: option is an integer 1-7 corresponding to the desired fill type
     //MODIFIES: the matrix object the method is called on
     //EFFECTS:  fills the matrix with the specified flavor of fill
     //          1: random rational number
@@ -161,12 +181,15 @@ class Matrix{
     //          7: make an identity matrix
     //          default: meme
     void fill_by_option(int option){
+        //error handling
+        if(option < 1 || option > 7)throw std::invalid_argument("ERROR: Please specify an integer in the range 1-5 to fill with");
+
         for (int column=0; column<dimensions; column++){
             for (int row=0; row<dimensions; row++) {
                 switch (option){                    // Switching to funcs for readability, could inline if wanted
                     case 1: data[column*dimensions+row]= random_float(200) - (float) 100;
                         break;
-                    case 2: data[column*dimensions+row]= (double) 3.14;
+                    case 2: data[column*dimensions+row]= (double) 3.14 * (random_int(1023)+1);
                         break;
                     case 3: data[column*dimensions+row]= random_int(2) - 1;
                         break;
