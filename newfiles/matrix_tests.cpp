@@ -86,6 +86,8 @@ bool make_tests(){
     Matrix<int> m1;
     Matrix<int> m2(5);
     Matrix<float> m3(5,1);
+    Matrix<float> m4{1.1,2.2,3.3,6.9};
+    //m4.print();
 
     if(m1.matrix_dimension() != 10) return false;
     if(m2.matrix_dimension() != 5) return false;
@@ -140,7 +142,9 @@ bool col_tests(){
 
 bool print_tests(){
     // Matrix<int> m1;
+    //Matrix<double> m2(3);
     // m1.print();
+    //m2.print();
 
     // m1.print("out_test.txt");
 
@@ -159,9 +163,11 @@ bool print_tests(){
 bool operator_tests(){
     Matrix<int> m1;
     Matrix<int> m2;
+    Matrix<int> m3(3);
 
     if(!(m1==m2)) return false;
     if(m1!=m2) return false;
+    if(m1 == m3) return false;
 
     return true;
 }

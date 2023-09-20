@@ -6,6 +6,7 @@
 #include <string>
 #include <list>
 #include <typeinfo>
+#include <cmath>
 #include "randos.h"
 #include "meme.h"
 #include "maths.h"
@@ -29,6 +30,21 @@ class Matrix{
     Matrix(int size = 10, int flavor = 5) { //defaults to meme flavor
         dimensions = size;
         this->fill_by_option(flavor);
+    }
+
+    Matrix(std::initializer_list<T> il){
+        //add assert to make sure it's a square matrix
+        double s1 = sqrt(il.size());
+        int s2 = sqrt(il.size());
+        assert(double(s2) == s1);
+
+        dimensions = sqrt(il.size());  //set size
+
+        for(int r=0; r<dimensions; ++r){
+            for(int c=0; c<dimensions; ++c){
+                *this->matrix_at(r,c) = *(il.begin() + r*dimensions + c);
+            }
+        }
     }
 
     //EFFECTS:  returns the width/height of the matrix
@@ -118,7 +134,7 @@ class Matrix{
 
     //operators
     bool operator==(Matrix<T> rhs){
-        assert(rhs.matrix_dimension() == this->matrix_dimension()); //replace with catch/throw handling later
+        if(rhs.matrix_dimension() != this->matrix_dimension()) return false;    //has to be the same size
 
         for(int r=0; r<rhs.matrix_dimension(); ++r){
             for(int c=0; c<rhs.matrix_dimension(); ++c){
