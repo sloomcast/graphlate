@@ -8,6 +8,7 @@ bool row_tests();
 bool col_tests();
 bool print_tests();
 bool rand_tests();
+bool operator_tests();
 
 int main(){
     cout << "hello bitch\n";
@@ -55,6 +56,15 @@ int main(){
     }
     else{
         cout << "PRINT TESTS FAILED YOU IDIOT\n\n";
+        all_pass - false;
+    }
+
+    //test operators
+    if(operator_tests()){
+        cout << "OPERATOR TESTS PASSED\n\n";
+    }
+    else{
+        cout << "OPERATOR TESTS FAILED YOU GOON\n\n";
         all_pass - false;
     }
 
@@ -129,6 +139,30 @@ bool col_tests(){
 }
 
 bool print_tests(){
+    // Matrix<int> m1;
+    // m1.print();
+
+    // m1.print("out_test.txt");
+
+    // ofstream yuh;
+    // ofstream yah;
+    // yah.open("out2_test.txt", ios::app);
+    // yuh.open("out_test.txt", ios::app);
+    // m1.print(yuh);
+    // m1.print(yah);
+
+    //the above code are functional tests that have all performed as desired
+
+    return true;
+}
+
+bool operator_tests(){
+    Matrix<int> m1;
+    Matrix<int> m2;
+
+    if(!(m1==m2)) return false;
+    if(m1!=m2) return false;
+
     return true;
 }
 

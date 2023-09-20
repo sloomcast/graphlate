@@ -18,9 +18,6 @@ bool debug_flag = false;
 template <typename T>
 class Matrix{
     public:
-    // Matrix(int size){
-    //     dimensions = size;
-    // }
 
     // Constructor to create a random matrix of specified flavor
     // Flavors: 1 - Random rationals
@@ -33,14 +30,9 @@ class Matrix{
         dimensions = size;
         this->fill_by_option(flavor);
     }
-    //default constructor
-    // Matrix(){
-    //     dimensions = 10;
-    //     this->fill_by_option(5); //default to meme flavor
-    // }
 
     //EFFECTS:  returns the width/height of the matrix
-    int matrix_dimension(){
+    int matrix_dimension() {
         return dimensions;
     }
 
@@ -53,7 +45,7 @@ class Matrix{
 
     //REQUIRES: 0 <= row <= dimensions
     //EFFECTS:  returns by reference the row at row
-    list<T> return_row(int row){
+    list<T> return_row(int row) {
         //make list
         list<T> to_return;
 
@@ -67,7 +59,7 @@ class Matrix{
 
     //REQUIRES: 0 <= col <= dimensions
     //EFFECTS:  returns by reference the column at col
-    list<T> return_col(int col){
+    list<T> return_col(int col) {
         //make list
         list<T> to_return;
 
@@ -82,35 +74,39 @@ class Matrix{
     //REQUIRES: os is a valid output stream capable of being written to
     //MODIFIES: the file specified in os
     //EFFECTS:  prints the matrix object to os
-    void print(ofstream &os){
+    //NOTE:     if the ofstream passed to the print function is not in append mode
+    //          the function WILL OVERWRITE any existing contents in the corresponding file
+    void print(ofstream &os) {
         for(int i=0; i<dimensions; ++i){
             for(int j=0; j<dimensions; ++j){
                 os << *matrix_at(i,j) << " ";
             }
-            cout << endl;
+            os << endl;
         }
-        cout << endl << endl;
+        os << endl << endl;
     }
 
     //REQUIRES: f_out is the name of an existing file or a file to be created
     //MODIFIES: the file specified in f_out
     //EFFECTS:  opens the file f_out or creates a new file and prints the matrix to it
-    void print(string f_out){
+    void print(string f_out) {
         //creates stream
         ofstream of;
-        of.open(f_out);
+        of.open(f_out, ios::app);
 
         for(int i=0; i<dimensions; ++i){
             for(int j=0; j<dimensions; ++j){
                 of << *matrix_at(i,j) << " ";
             }
-            cout << endl;
+            of << endl;
         }
-        cout << endl << endl;
+        of << endl << endl;
+
+        of.close();
     }
 
     //EFFECTS:  prints the matrix to stdout
-    void print(){
+    void print() {
         for(int i=0; i<dimensions; ++i){
             for(int j=0; j<dimensions; ++j){
                 cout << *matrix_at(i,j) << " ";
@@ -118,6 +114,23 @@ class Matrix{
             cout << endl;
         }
         cout << endl << endl;
+    }
+
+    //operators
+    bool operator==(Matrix<T> rhs){
+        assert(rhs.matrix_dimension() == this->matrix_dimension()); //replace with catch/throw handling later
+
+        for(int r=0; r<rhs.matrix_dimension(); ++r){
+            for(int c=0; c<rhs.matrix_dimension(); ++c){
+                if(*(this->matrix_at(r,c)) != *rhs.matrix_at(r,c)) return false;
+            }
+        }
+
+        return true;
+    }
+
+    bool operator!=(Matrix<T> rhs){    
+        return !(*this == rhs);
     }
 
     //REQUIRES: option is an integer 1-5 corresponding to the desired fill type
