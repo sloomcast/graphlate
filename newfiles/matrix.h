@@ -11,8 +11,6 @@
 #include "meme.h"
 #include "maths.h"
 
-using namespace std;
-
 const int MAX_DIMENSION = 100;
 bool debug_flag = false;
 
@@ -68,12 +66,12 @@ class Matrix{
 
     //REQUIRES: 0 <= row <= dimensions
     //EFFECTS:  returns by reference the row at row
-    list<T> return_row(int row) {
+    std::list<T> return_row(int row) {
         //error handling
         if(row < 0 || row > dimensions) throw std::invalid_argument("ERROR: Invalid row value");
 
         //make list
-        list<T> to_return;
+        std::list<T> to_return;
 
         //add to list
         for(int i=0; i<dimensions; ++i){
@@ -85,12 +83,12 @@ class Matrix{
 
     //REQUIRES: 0 <= col <= dimensions
     //EFFECTS:  returns by reference the column at col
-    list<T> return_col(int col) {
+    std::list<T> return_col(int col) {
         //error handling
         if(col < 0 || col > dimensions) throw std::invalid_argument("ERROR: Invalid column value");
 
         //make list
-        list<T> to_return;
+        std::list<T> to_return;
 
         //add to list
         for(int i=0; i<dimensions; ++i){
@@ -105,7 +103,7 @@ class Matrix{
     //EFFECTS:  prints the matrix object to os
     //NOTE:     if the ofstream passed to the print function is not in append mode
     //          the function WILL OVERWRITE any existing contents in the corresponding file
-    void print(ofstream &os) {
+    void print(std::ofstream &os) {
         //error handling
         if(!os.is_open()) throw std::invalid_argument("ERROR: Please input a valid ofstream to print to");
 
@@ -113,30 +111,30 @@ class Matrix{
             for(int j=0; j<dimensions; ++j){
                 os << *matrix_at(i,j) << " ";
             }
-            os << endl;
+            os << std::endl;
         }
-        os << endl << endl;
+        os << std::endl << std::endl;
     }
 
     //REQUIRES: f_out is the name of an existing file or a file to be created
     //MODIFIES: the file specified in f_out
     //EFFECTS:  opens the file f_out or creates a new file and prints the matrix to it
-    void print(string f_out) {
+    void print(std::string f_out) {
         //error handling
         if(f_out == "") throw std::invalid_argument("ERROR: Please input a valid filename");
 
         //creates stream
-        ofstream of;
-        of.open(f_out, ios::app);
+        std::ofstream of;
+        of.open(f_out, std::ios::app);
         if(!of.is_open()) throw std::invalid_argument("ERROR: Encountered an issue opening file" + f_out);
 
         for(int i=0; i<dimensions; ++i){
             for(int j=0; j<dimensions; ++j){
                 of << *matrix_at(i,j) << " ";
             }
-            of << endl;
+            of << std::endl;
         }
-        of << endl << endl;
+        of << std::endl << std::endl;
 
         of.close();
     }
@@ -145,11 +143,11 @@ class Matrix{
     void print() {
         for(int i=0; i<dimensions; ++i){
             for(int j=0; j<dimensions; ++j){
-                cout << *matrix_at(i,j) << " ";
+                std::cout << *matrix_at(i,j) << " ";
             }
-            cout << endl;
+            std::cout << std::endl;
         }
-        cout << endl << endl;
+        std::cout << std::endl << std::endl;
     }
 
     //operators
