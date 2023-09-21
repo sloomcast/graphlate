@@ -42,6 +42,9 @@
 *.idb
 *.pdb
 
+#test text files
+*.txt
+
 # Kernel Module Compile Results
 *.mod*
 *.cmd
@@ -56,4 +59,3 @@ Makefile
 makefile
 .DS_Store
 /Menu
-/men2
