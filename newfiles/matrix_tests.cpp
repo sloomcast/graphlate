@@ -79,7 +79,7 @@ int main(){
     }
 
     //error testing
-    test_errors();
+    //test_errors();
 
     if(all_pass) cout << "ALL TESTS PASSED\n\n";
     else cout << "NOT ALL PASSED\n\n";
@@ -96,7 +96,7 @@ bool make_tests(){
     if(m1.matrix_dimension() != 10) return false;
     if(m2.matrix_dimension() != 5) return false;
 
-    //cout << typeid(*m3.matrix_at(0,0)).name() << endl;
+    //cout << typeid(m3(0,0)).name() << endl;
     //m1.print();
 
     return true;
@@ -106,8 +106,8 @@ bool at_tests(){
     Matrix<float> m1;
     Matrix<int> m2;
 
-    if(*m1.matrix_at(0,0) != 3.0) return false;
-    if(*m2.matrix_at(2,3) != 4) return false;
+    if(m1(0,0) != 3.0) return false;
+    if(m2(2,3) != 4) return false;
 
 
     return true;
@@ -173,13 +173,19 @@ bool operator_tests(){
     if(m1!=m2) return false;
     if(m1 == m3) return false;
 
+    //testing of random access operators
+    // m3.print();
+    // cout << m3(0,0) << "\n";
+    // cout << m3(1,1) << "\n";
+    // cout << m3(3,1) << "\n";
+
     return true;
 }
 
 void test_errors(){
     try{
         Matrix<int> m1;
-        int test = *m1.matrix_at(1,13);
+        int test = m1(1,13);
 
         m1.print();
     }

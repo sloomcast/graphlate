@@ -12,7 +12,7 @@
 static int random_int()
 {
     static std::mt19937 m_mt( std::time(nullptr) );
-    static std::uniform_int_distribution<int> dist(0, 999999999);
+    static std::uniform_int_distribution<int> dist(0, 1024);
 
     return dist(m_mt);
 }
@@ -30,7 +30,7 @@ static int random_int(int max)
 // OUTPUT: a pseudo-random float between the range 0 and 999999999
 static float random_float() {
     static std::mt19937 m_mt( std::time(nullptr) );
-    static std::uniform_real_distribution<float> dist(0, 999999999);
+    static std::uniform_real_distribution<float> dist(0, 1024);
 
     return dist(m_mt);
 }
@@ -48,7 +48,7 @@ static float random_float(int max) {
 static double random_double()
 {
     static std::mt19937 m_mt( std::time(nullptr) );
-    static std::uniform_real_distribution<double> dist(0, 999999999);
+    static std::uniform_real_distribution<double> dist(0, 1024);
 
     return dist(m_mt);
 }

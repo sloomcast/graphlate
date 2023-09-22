@@ -55,22 +55,11 @@ class Matrix{
         return dimensions;
     }
 
-    //REQUIRES: 0 <= row,col <= dimensions
-    //EFFECTS:  returns by reference the value stored at row,col
-    T* matrix_at(int row, int col){
-        //error handling
-        if(row < 0 || row > dimensions) throw std::invalid_argument("ERROR: Invalid row value");
-        if(col < 0 || col > dimensions) throw std::invalid_argument("ERROR: Invalid column value");
-
-        int index = row*dimensions + col;
-        return &data[index];
-    }
-
     //REQUIRES: 0 <= row <= dimensions
     //EFFECTS:  returns by reference the row at row
     list<T> return_row(int row) {
         //error handling
-        if(row < 0 || row > dimensions) throw std::invalid_argument("ERROR: Invalid row value");
+        if(row < 0 || row >= dimensions) throw std::invalid_argument("ERROR: Invalid row value");
 
         //make list
         list<T> to_return;
@@ -87,7 +76,7 @@ class Matrix{
     //EFFECTS:  returns by reference the column at col
     list<T> return_col(int col) {
         //error handling
-        if(col < 0 || col > dimensions) throw std::invalid_argument("ERROR: Invalid column value");
+        if(col < 0 || col >= dimensions) throw std::invalid_argument("ERROR: Invalid column value");
 
         //make list
         list<T> to_return;
@@ -169,6 +158,14 @@ class Matrix{
         return !(*this == rhs);
     }
 
+    T operator()(int num1, int num2){
+        //error handling
+        if(num1 < 0 || num1 >= dimensions) throw std::invalid_argument("ERROR: Invalid row value");
+        if(num2 < 0 || num2 >= dimensions) throw std::invalid_argument("ERROR: Invalid column value");
+
+        return *(this->matrix_at(num1,num2));
+    }
+
     //REQUIRES: option is an integer 1-7 corresponding to the desired fill type
     //MODIFIES: the matrix object the method is called on
     //EFFECTS:  fills the matrix with the specified flavor of fill
@@ -207,9 +204,50 @@ class Matrix{
         }
     }
 
+    //EFFECTS:  returns the determinant of the matrix the method is called on
+    T determinant(){
+        T det = 0;
+
+        //checks for size 1
+        if(dimensions == 1){
+            return this->(0,0);
+        }
+        else if(dimensions == 2){   //size 2
+            return this->(0,0) * this->(1,1) - this->(0,1) * this->(1,0);
+        }
+        else{   //da otha sizes
+            for(int i=0; i<dimensions; ++i){
+                Matrix<T> temp(dimensions-1);
+                for(int j=1; j<dimensions; ++j){
+                    for(int k=0; k<dimensions; ++k){
+                        if(k<i){
+                            *temp.matrix_at(j-1,k) = *this->matrix_at(j,k);
+                        }
+                        else if(k > i){
+                            *temp.matrix_at(j-1,k-1) = *this->matrix_at(j,k);
+                        }
+                    }
+                }
+                det += this->(0,i) * pow(-1,i) * temp.determinant();
+            }
+        }
+        return det;
+    }
+
     protected:
     int dimensions;
     T data[MAX_DIMENSION*MAX_DIMENSION];
+
+    //REQUIRES: 0 <= row,col <= dimensions
+    //EFFECTS:  returns by reference the value stored at row,col
+    T* matrix_at(int row, int col){
+        //error handling
+        if(row < 0 || row >= dimensions) throw std::invalid_argument("ERROR: Invalid row value");
+        if(col < 0 || col >= dimensions) throw std::invalid_argument("ERROR: Invalid column value");
+
+        int index = row*dimensions + col;
+        return &data[index];
+    }
 };
 
 
@@ -228,7 +266,7 @@ void print_eq(Matrix<int> matrix_1, Matrix<int> matrix_2, Matrix<int> result) {
     for (int j=0; j<size1; j++) {                    
         for(int k=0; k<size1; k++)//Print each value in the jth row for Matrix 1
         {
-            printf(" %d ",*matrix_1.matrix_at(j,k));
+            printf(" %d ",matrix_1(j,k));
         }
         
         //If it's in the right spot, print a multiplication symbol
@@ -244,7 +282,7 @@ void print_eq(Matrix<int> matrix_1, Matrix<int> matrix_2, Matrix<int> result) {
         //Print each value in the jth row for for Matrix 2
         for(int k=0; k<size1; k++)
         {
-           printf(" %d ",*matrix_2.matrix_at(j,k));
+           printf(" %d ",matrix_2(j,k));
         }
     
         //If it's in the right spot, print the equals symbol
@@ -260,7 +298,7 @@ void print_eq(Matrix<int> matrix_1, Matrix<int> matrix_2, Matrix<int> result) {
         //Print each value in the jth row for the result matrix
         for(int k=0; k<size1; k++)
         {
-            printf(" %d ",*result.matrix_at(j,k));
+            printf(" %d ",result(j,k));
         }
         printf("\n");
     }
@@ -271,4 +309,15 @@ Matrix<int> mat_mult(Matrix<int> matrix_1, Matrix<int> matrix_2) {
     Matrix<int> matrix(3,1);
     return matrix;
 }
+
+//REQUIRES: size < MAX_DIMENSIONS
+//EFFECTS:  returns by value a complete graph matrix of the designated size
+Matrix<int> complete_graph(int size){
+    //declare new matrix
+    Matrix<int> new_mat(size,6);
+
+    //return matrix
+    return new_mat;
+}
+
 #endif
