@@ -232,6 +232,7 @@ class Matrix{
         return det;
     }
 
+    //EFFECTS:  checks if the matrix object is invertible, calls determinant
     bool invertible(){
         if(this->determinant() == 0){
             return false;
@@ -239,11 +240,25 @@ class Matrix{
         else return true;
     }
 
+    //REQUIRES: 0 <= row, col < dimensions
+    //MODIFIES: the matrix object pointed to by this
+    //EFFECTS:  sets the value at (row,col) to val
     void set(int row, int col, T val){
+        //error handling
+        if(row < 0 || row >= dimensions) throw std::invalid_argument("ERROR: Invalid row value");
+        if(col < 0 || col >= dimensions) throw std::invalid_argument("ERROR: Invalid column value");
+
         *(this->matrix_at(row,col)) = val;
     }
 
+    //REQUIRES: node1, node2 are valid location on the matrix
+    //MODIFIES: the matrix pointed to by this
+    //EFFECTS:  creates a connection in a graph between node1 and node2
     void create_connection(int node1, int node2){
+        //error handling
+        if(node1 <= 0 || node1 > dimensions) throw std::invalid_argument("ERROR: Invalid row value");
+        if(node2 <= 0 || node2 > dimensions) throw std::invalid_argument("ERROR: Invalid column value");
+
         //size and setting the node indices
         int size = node1 + node2;
         node1--;
