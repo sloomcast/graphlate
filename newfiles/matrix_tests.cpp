@@ -10,6 +10,7 @@ bool print_tests();
 bool rand_tests();
 bool operator_tests();
 void test_errors();
+bool determinant_tests();
 
 int main(){
     cout << "hello bitch\n";
@@ -80,6 +81,15 @@ int main(){
 
     //error testing
     //test_errors();
+
+    //test determinant func
+    if(determinant_tests()){
+        cout << "DETERMINANT TESTS PASSED\n\n";
+    }
+    else{
+        cout << "DETERMINANT TESTS FAILED, YOU BUFFOON\n\n";
+        all_pass = false;
+    }
 
     if(all_pass) cout << "ALL TESTS PASSED\n\n";
     else cout << "NOT ALL PASSED\n\n";
@@ -231,6 +241,22 @@ bool rand_tests(){
     Matrix<int> m5(5,4);
     Matrix<int> m6(5,4);
     if(m5 == m6) return false;
+
+    return true;
+}
+
+bool determinant_tests(){
+    //declarations
+    Matrix<int> m1{5};
+    Matrix<int> m2{1,1,1,1};
+    Matrix<int> m3{1,4,5,7};
+    Matrix<int> m4{6,5,3,4,7,9,1,1,2};
+
+    //tests
+    if(m1.determinant() != 5) return false;
+    if(m2.determinant() != 0) return false;
+    if(m3.determinant() != -13) return false;
+    if(m4.determinant() != 26) return false;
 
     return true;
 }

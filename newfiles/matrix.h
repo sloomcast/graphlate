@@ -208,10 +208,10 @@ class Matrix{
 
         //checks for size 1
         if(dimensions == 1){
-            return this->(0,0);
+            return (*this)(0,0);
         }
         else if(dimensions == 2){   //size 2
-            return this->(0,0) * this->(1,1) - this->(0,1) * this->(1,0);
+            return (*this)(0,0) * (*this)(1,1) - (*this)(0,1) * (*this)(1,0);
         }
         else{   //da otha sizes
             for(int i=0; i<dimensions; ++i){
@@ -219,17 +219,47 @@ class Matrix{
                 for(int j=1; j<dimensions; ++j){
                     for(int k=0; k<dimensions; ++k){
                         if(k<i){
-                            *temp.matrix_at(j-1,k) = *this->matrix_at(j,k);
+                            *temp.matrix_at(j-1,k) = *(this->matrix_at(j,k));
                         }
                         else if(k > i){
-                            *temp.matrix_at(j-1,k-1) = *this->matrix_at(j,k);
+                            *temp.matrix_at(j-1,k-1) = *(this->matrix_at(j,k));
                         }
                     }
                 }
-                det += this->(0,i) * pow(-1,i) * temp.determinant();
+                det += (*this)(0,i) * pow(-1,i) * temp.determinant();
             }
         }
         return det;
+    }
+
+    bool invertible(){
+        if(this->determinant() == 0){
+            return false;
+        }
+        else return true;
+    }
+
+    void set(int row, int col, T val){
+        *(this->matrix_at(row,col)) = val;
+    }
+
+    void create_connection(int node1, int node2){
+        //size and setting the node indices
+        int size = node1 + node2;
+        node1--;
+        node2--;
+
+        //creates the connection in the graph
+        for(int i=0; i<size; ++i){
+            for(int j=0; j<size; ++j){
+                if(i == node1 && j == node2){
+                    this->set(i,j,1);
+                }
+                else if(i == node2 && j == node1){
+                    this->set(i,j,1);
+                }
+            }
+        }
     }
 
     protected:
@@ -317,5 +347,33 @@ Matrix<int> complete_graph(int size){
     //return matrix
     return new_mat;
 }
+
+template <typename T>
+Matrix<T> combineGraphs(Matrix<T> &m1, Matrix<T> &m2){
+    //new size and new matrix
+    int new_size = m1.matrix_dimension() + m2.matrix_dimension();
+    Matrix<T> new_mat(new_size);
+
+    //combines the graphs
+    for(int i=0; i<new_size; ++i){
+        for(int j=0; j<new_size; ++j){
+            if(i == j){
+                new_mat.set(i,j,0);
+            }
+            else if(i < m1.matrix_dimension() && j < m1.matrix_dimension()){
+                if(i != j) new_mat.set(i,j,1);
+            }
+            else if(i >= m1.matrix_dimension() && j >= m1.matrix_dimension()){
+                if(i != j) new_mat.set(i,j,1);
+            }
+            else{
+                new_mat.set(i,j,0);
+            }
+        }
+    }
+    return new_mat;
+}
+
+
 
 #endif
