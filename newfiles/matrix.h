@@ -27,7 +27,7 @@ class Matrix{
     //          6 - Complete graphs
     Matrix(int size = 10, int flavor = 5) { //defaults to meme flavor
         //error handling
-        if(flavor < 1 || flavor > 6)throw std::invalid_argument("ERROR: Please enter a matrix fill designation between 1-5");
+        if((flavor < 1 || flavor > 6) && flavor != 8)throw std::invalid_argument("ERROR: Please enter a matrix fill designation between 1-5");
 
         dimensions = size;
         this->fill_by_option(flavor);
@@ -100,9 +100,9 @@ class Matrix{
             for(int j=0; j<dimensions; ++j){
                 os << *matrix_at(i,j) << " ";
             }
-            os << std::endl;
+            os << "\n";
         }
-        os << std::endl << std::endl;
+        os << "\n" << "\n";
     }
 
     //REQUIRES: f_out is the name of an existing file or a file to be created
@@ -121,9 +121,9 @@ class Matrix{
             for(int j=0; j<dimensions; ++j){
                 of << *matrix_at(i,j) << " ";
             }
-            of << std::endl;
+            of << "\n";
         }
-        of << std::endl << std::endl;
+        of << "\n" << "\n";
 
         of.close();
     }
@@ -134,9 +134,9 @@ class Matrix{
             for(int j=0; j<dimensions; ++j){
                 std::cout << *matrix_at(i,j) << " ";
             }
-            std::cout << std::endl;
+            std::cout << "\n";
         }
-        std::cout << std::endl << std::endl;
+        std::cout << "\n" << "\n";
     }
 
     //operators
@@ -145,7 +145,9 @@ class Matrix{
 
         for(int r=0; r<rhs.matrix_dimension(); ++r){
             for(int c=0; c<rhs.matrix_dimension(); ++c){
-                if(*(this->matrix_at(r,c)) != *rhs.matrix_at(r,c)) return false;
+                T left = *(this->matrix_at(r,c));
+                T right = *rhs.matrix_at(r,c);
+                if(left != right) return false;
             }
         }
 
@@ -164,6 +166,156 @@ class Matrix{
         return *(this->matrix_at(num1,num2));
     }
 
+    Matrix<T> operator+(Matrix<T> &rhs){
+        //create new matrix
+        Matrix<T> m1(this->matrix_dimension(), 8);
+
+        try{
+            //error handling
+            if(this->matrix_dimension() != rhs.matrix_dimension()) throw std::invalid_argument("ERROR: Matrices must be the same size to perform addition");
+
+            //fills new matrix by adding values
+            for(int i=0; i<this->matrix_dimension(); ++i){
+                for(int j=0; j<this->matrix_dimension(); ++j){
+                    m1.set(i,j,(*this)(i,j) + rhs(i,j));
+                }
+            }
+            
+        }
+        catch(std::exception &e){
+            std::cerr << e.what() << "\n";
+        }
+        return m1;
+    }
+
+    Matrix<T> operator-(Matrix<T> &rhs){
+        Matrix<T> to_add = rhs.make_neg();
+        return (*this)+to_add;
+    }
+
+    Matrix<T> operator*(Matrix<T> &rhs){
+        //error handling
+        if(this->matrix_dimension() != rhs.matrix_dimension()) throw std::invalid_argument("ERROR: Matrix dimension must match");
+
+        //base case, matrices are 1x1
+        if(rhs.matrix_dimension() == 1){
+            Matrix<T> base(1,8);
+            base.set(0,0,(*this)(0,0) * rhs(0,0));
+            return base;
+        }
+
+        //make the matrices size 2^n x 2^n
+        int new_size = rhs.next_size(rhs.matrix_dimension());
+        Matrix<T> mult1(new_size, 8);
+        Matrix<T> mult2(new_size, 8);
+
+        //fill new matrices
+        for(int i=0; i<new_size; ++i){
+            for(int j=0; j<new_size; ++j){
+                if(i < rhs.matrix_dimension() && j < rhs.matrix_dimension()){
+                    mult1.set(i,j,(*this)(i,j));
+                    mult2.set(i,j,rhs(i,j));
+                }
+                else{
+                    mult1.set(i,j,0);
+                    mult2.set(i,j,0);
+                }
+            }
+        }
+
+        //divide each matrix into 4 blocks
+        //this blocks
+        Matrix<T> topleft1(new_size/2,8);
+        Matrix<T> topright1(new_size/2,8);
+        Matrix<T> bottomleft1(new_size/2,8);
+        Matrix<T> bottomright1(new_size/2,8);
+        //rhs blocks
+        Matrix<T> topleft2(new_size/2,8);
+        Matrix<T> topright2(new_size/2,8);
+        Matrix<T> bottomleft2(new_size/2,8);
+        Matrix<T> bottomright2(new_size/2,8);
+        //fill blocks
+        for(int i=0; i<new_size; ++i){
+            for(int j=0; j<new_size; ++j){
+                if(i < new_size/2 && j < new_size/2){   //top left quadrant
+                    topleft1.set(i,j,mult1(i,j));
+                    topleft2.set(i,j,mult2(i,j));
+                }
+                else if(i < new_size/2 && j >= new_size/2){ //top right quadrant
+                    topright1.set(i,j-(new_size/2),mult1(i,j));
+                    topright2.set(i,j-(new_size/2),mult2(i,j));
+                }
+                else if(i >= new_size/2 && j < new_size/2){ //bottom left quadrant
+                    bottomleft1.set(i-(new_size/2),j,mult1(i,j));
+                    bottomleft2.set(i-(new_size/2),j,mult2(i,j));
+                }
+                else if(i >= new_size/2 && j >= new_size/2){    //bottom right quadrant
+                    bottomright1.set(i-(new_size/2),j-(new_size/2),mult1(i,j));
+                    bottomright2.set(i-(new_size/2),j-(new_size/2),mult2(i,j));
+                }
+            }
+        }
+
+        //the seven new matrices based on the Strassen algorithm, see link below
+        //https://en.wikipedia.org/wiki/Strassen_algorithm
+        //m1
+        Matrix<T> left = topleft1 + bottomright1;
+        Matrix<T> right = topleft2 + bottomright2;
+        Matrix<T> m1 = left * right;
+        //m2
+        left = bottomleft1 + bottomright1;
+        Matrix<T> m2 = left * topleft2;
+        //m3
+        right = topright2 - bottomright2;
+        Matrix<T> m3 = topleft1 * right;
+        //m4
+        right = bottomleft2 - topleft2;
+        Matrix<T> m4 = bottomright1 * right;
+        //m5
+        left = topleft1 + topright1;
+        Matrix<T> m5 = left * bottomright2;
+        //m6
+        left = bottomleft1 - topleft1; right = topleft2 + topright2;
+        Matrix<T> m6 = left * right;
+        //m7
+        left = topright1 - bottomright1; right = bottomleft2 + bottomright2;
+        Matrix<T> m7 = left * right;
+
+        //reassigns the blocks
+        //top left
+        left = m1 + m4; left = left - m5;
+        topleft1 = left + m7;
+        //top right
+        topright1 = m3 + m5;
+        //bottom left
+        bottomleft1 = m2 + m4;
+        //bottom right
+        left = m1 - m2; left = left + m3;
+        bottomright1 = left + m6;
+
+        //copies the quadrants into the matrix to be returned
+        Matrix<T> to_return(rhs.matrix_dimension(),8);
+        for(int i=0; i<rhs.matrix_dimension(); ++i){
+            for(int j=0; j<rhs.matrix_dimension(); ++j){
+                if(i < new_size/2 && j < new_size/2){   //top left quadrant
+                    to_return.set(i,j,topleft1(i,j));
+                }
+                else if(i < new_size/2 && j >= new_size/2){ //top right quadrant
+                    to_return.set(i,j,topright1(i,j-(new_size/2)));
+                }
+                else if(i >= new_size/2 && j < new_size/2){ //bottom left quadrant
+                    to_return.set(i,j,bottomleft1(i-(new_size/2),j));
+                }
+                else if(i >= new_size/2 && j >= new_size/2){    //bottom right quadrant
+                    to_return.set(i,j,bottomright1(i-(new_size/2),j-(new_size/2)));
+                }
+            }
+        }
+
+        //return final matrix
+        return to_return;
+    }
+
     //REQUIRES: option is an integer 1-7 corresponding to the desired fill type
     //MODIFIES: the matrix object the method is called on
     //EFFECTS:  fills the matrix with the specified flavor of fill
@@ -175,9 +327,13 @@ class Matrix{
     //          6: make a complete graph
     //          7: make an identity matrix
     //          default: meme
+    //          8: leave the matrix unfilled
     void fill_by_option(int option){
         //error handling
-        if(option < 1 || option > 7)throw std::invalid_argument("ERROR: Please specify an integer in the range 1-5 to fill with");
+        if(option < 1 || option > 8)throw std::invalid_argument("ERROR: Please specify an integer in the range 1-8 to fill with");
+
+        //skips the fill
+        if(option == 8) return;
 
         for (int column=0; column<dimensions; column++){
             for (int row=0; row<dimensions; row++) {
@@ -195,6 +351,7 @@ class Matrix{
                     case 6: data[column*dimensions+row]= column==row ? 0 : 1;
                         break;
                     case 7: data[column*dimensions+row]= column==row ? 1 : 0;
+                        break;
                     default: data[column*dimensions+row] = 0;
                         break;
                 }
@@ -290,6 +447,28 @@ class Matrix{
 
         int index = row*dimensions + col;
         return &data[index];
+    }
+
+    //EFFECTS:  returns the next 2^n size to expand a matrix to
+    int next_size(int size){
+        for(int i=0; i<11; ++i){
+            if(pow(2,i) >= size) return pow(2,i);
+        }
+
+        return -1;
+    }
+
+    //EFFECTS:  returns a matrix with the same values but negative for subtraction purposes
+    Matrix<T> make_neg(){
+        //new mat
+        Matrix<T> m1(this->matrix_dimension(),8);
+
+        for(int i=0; i<m1.matrix_dimension(); ++i){
+            for(int j=0; j<m1.matrix_dimension(); ++j){
+                m1.set(i,j,(*this)(i,j) * -1);
+            }
+        }
+        return m1;
     }
 };
 
@@ -388,7 +567,5 @@ Matrix<T> combineGraphs(Matrix<T> &m1, Matrix<T> &m2){
     }
     return new_mat;
 }
-
-
 
 #endif
