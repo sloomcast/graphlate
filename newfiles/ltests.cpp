@@ -1,11 +1,12 @@
 #include "matrix.h"
-
+#include <string>
 using namespace std;
 
 // Testing functions
 int print_mat();
 int rands();
 int mults();
+int get_run(char* argv);
 
 // For modular code
 const int NUM_TESTS = 5;
@@ -25,13 +26,58 @@ const char *TEST2_NAMES[TEST2_NUM_TESTS] = {"Rationals","Irrationals","Integers"
 const int TEST3_NUM_TESTS = 10;
 const int TEST3_SIZES[TEST3_NUM_TESTS] = {1,2,3,4,5,6,7,8,9,10};
 
-// Main function
-int main(){
-    int val; // init int to store return values
+// Wrapper for try/catch
+int try_get(char* argv,int def) {
+    int num=def;
+    try
+    {
+        num =stoi(argv);
+    }
+    catch(const std::exception& e)
+    {
+        std::cerr << e.what() << '\n';
+    }
+    return num;
+}
 
-    // Run through all test cases
-    for(int i=0; i<NUM_TESTS; i++){
-        printf("Test %d:\t%s\n\n",i+1,TEST_NAMES[i]); // Output the name of the test case
+// get the start point
+int get_start(char* argv) {
+    return try_get(argv,0);
+}
+
+// get the end point
+int get_end(char* argv) {
+    return try_get(argv,NUM_TESTS);
+}
+
+// Main function
+int main(int argc, char** argv){
+    int val;
+    int run_start=0;            // Default the start of the run to be 0
+    int run_end=NUM_TESTS;      // Default the end of the run to be 0
+
+    if(argc > 3){
+        return 0;
+    } else if (argc == 2){
+        run_start = get_end(argv[1]);
+        run_end = run_start;
+        run_start--;
+    } else if (argc == 3){
+        run_start=get_start(argv[1]);
+        run_end=get_end(argv[2]);
+        run_start--;
+    }
+
+    //printf("Start:\t%d\n",run_start);
+    //printf("End:\t%d\n",run_end);
+
+    // Run through the specified test cases
+    for(int i=run_start; i<run_end; i++){
+        if (i < NUM_TESTS) {
+            printf("Test %d:\t%s\n\n",i+1,TEST_NAMES[i]); // Output the name of the test case
+        } else {
+            printf("Test %d:\t%s\n\n",i+1,MEME_ARRAY_2[ i % 10 ]);
+        }
         switch(i+1){
             case 1: val=print_mat();    //First test: can it print
                 break;
