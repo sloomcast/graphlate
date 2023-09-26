@@ -25,9 +25,10 @@ class Matrix{
     //          4 - Random natural numbers
     //          5 - Meme
     //          6 - Complete graphs
+    //          7 - Identity matrix
     Matrix(int size = 10, int flavor = 5) { //defaults to meme flavor
         //error handling
-        if((flavor < 1 || flavor > 6) && flavor != 8)throw std::invalid_argument("ERROR: Please enter a matrix fill designation between 1-5");
+        if((flavor < 1 || flavor > 7) && flavor != 8)throw std::invalid_argument("ERROR: Please enter a matrix fill designation between 1-7");
 
         dimensions = size;
         this->fill_by_option(flavor);

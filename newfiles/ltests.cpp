@@ -19,9 +19,11 @@ const int TEST1_SIZES[TEST1_NUM_TESTS] = {2,4,6,8,10};
 const int TEST2_NUM_TESTS = 6;
 const int TEST2_SIZE = 3;
 const int TEST2_RAND_PARAMS[TEST2_NUM_TESTS] = {1,2,3,4,5,6}; // they could be diff so I'm doing it this way
-const char *TEST2_NAMES[TEST2_NUM_TESTS] = {"Rationals","Irrationals (hehe)","Integers","Naturals","Meme","Complete"};
-// Test 3 Parameters
+const char *TEST2_NAMES[TEST2_NUM_TESTS] = {"Rationals","Irrationals","Integers","Naturals","Meme","Complete"};
 
+// Test 3 Parameters
+const int TEST3_NUM_TESTS = 10;
+const int TEST3_SIZES[TEST3_NUM_TESTS] = {1,2,3,4,5,6,7,8,9,10};
 
 // Main function
 int main(){
@@ -58,7 +60,7 @@ int main(){
     return 0;
 }
 
-// Test 1: Build four matrices and print them out.
+// Test 1: Build four matrices and print them out. NO BENCHMARK RIGHT NOW
 // RETURNS: 0 if succeeded, 1 if failed
 int print_mat(){
     for(int size: TEST1_SIZES) {
@@ -77,7 +79,7 @@ int print_mat(){
     return 0;
 }
 
-// Test 2: Randomize 6 matrices and print them.
+// Test 2: Randomize 6 matrices and print them. NO BENCHMARK RIGHT NOW
 // RETURNS: 0 if succeeded, 1 if failed
 int rands() {
     try
@@ -129,24 +131,29 @@ int rands() {
 //          Print out the equation representation.
 // RETURNS: 0 if succeeded, 1 if failed
 int mults() {
-    //Init three matrices
-    Matrix<int> matrix_1(3,1);
-    Matrix<int> matrix_2(3,1);
-    Matrix<int> matrix_3(3,1);
+    int time; //to store result of benchmark to
 
-    // Multiply (unimplemented)
+    for(int i=0; i<TEST3_NUM_TESTS; i++) {
+        // Init matrices
+        // START BENCHMARK HERE
+        Matrix<int> matrix_1(TEST3_SIZES[i],4);
+        Matrix<int> matrix_2(TEST3_SIZES[i],7); // Multiply against an identity for easy visual check
+        Matrix<int> matrix_3 = matrix_1 * matrix_2;
+        time=0; // OWEN THIS IS WHERE YOU INSERT THE RESULT OF THE BENCHMARK
+        // END BENCHMARK
 
-    //Try and print, catch failures
-    try
-    {
-        print_eq(matrix_1,matrix_2,matrix_3);
+        printf("Case %d:\t%dX%d\n",i,i,i);
+        try
+        {
+            print_eq(matrix_1,matrix_2,matrix_3);
+        }
+        catch(const std::exception& e)
+        {
+            std::cerr << e.what() << '\n';
+        }
+        printf("End Case. Ran in %d\n\n",time); // OWEN THIS IS WHERE YOU INSERT THE RESULT OF BENCHMARKING
     }
-    catch(const std::exception& e)
-    {
-        std::cerr << e.what() << '\n';
-        return 1;
-    }
-    
+
     // exit with success
     return 0;
 }
