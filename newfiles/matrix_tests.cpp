@@ -1,4 +1,5 @@
 #include "matrix.h"
+#include "benchmark.h"
 #include <chrono>
 
 using namespace std;
@@ -351,7 +352,7 @@ bool mult_tests(){
 void benchmarking(){
     for(int i=0; i<10; i++){
         //start time1
-        auto start1 = std::chrono::high_resolution_clock::now();
+        benchmark_start();
 
         //function calls
         // Matrix<int> m1(4,3);
@@ -364,10 +365,10 @@ void benchmarking(){
         Matrix<int> mult5 = m9 * m9;
 
         //end time1
-        auto stop1 = std::chrono::high_resolution_clock::now();
-        auto time1 = std::chrono::duration_cast<std::chrono::microseconds>(stop1 - start1);
+        benchmark_end();
 
         //print times
-        std::cout << "Strassen time: " << time1.count() << "\n";
+        benchmark_print();
     }
+    cout << "\n";
 }

@@ -201,5 +201,6 @@ int mults() {
     }
 
     // exit with success
+    //lol hi lucas
     return 0;
 }
