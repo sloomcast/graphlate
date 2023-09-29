@@ -110,12 +110,16 @@ int main(int argc, char** argv){
 // Test 1: Build four matrices and print them out. NO BENCHMARK RIGHT NOW
 // RETURNS: 0 if succeeded, 1 if failed
 int print_mat(){
+    int time=0;
     for(int size: TEST1_SIZES) {
         try
         {
             printf("Matrix %d: %dX%d\n",size,size,size);
+            benchmark_start();
             Matrix<int> matrix(size,4);
             matrix.print();
+            time=benchmark_mark();
+            printf("Ran in %d\n",time);
         }
         catch(const std::exception& e)
         {
@@ -129,16 +133,18 @@ int print_mat(){
 // Test 2: Randomize 6 matrices and print them. NO BENCHMARK RIGHT NOW
 // RETURNS: 0 if succeeded, 1 if failed
 int rands() {
+    int time=0;
     try
     {   
         // Build
+        benchmark_start();
         Matrix<float> matrix_1(TEST2_SIZE,TEST2_RAND_PARAMS[0]);    //rats
         Matrix<float> matrix_2(TEST2_SIZE,TEST2_RAND_PARAMS[1]);    //irrats
         Matrix<int> matrix_3(TEST2_SIZE,TEST2_RAND_PARAMS[2]);      //ints
         Matrix<int> matrix_4(TEST2_SIZE,TEST2_RAND_PARAMS[3]);      //nats
         Matrix<int> matrix_5(TEST2_SIZE,TEST2_RAND_PARAMS[4]);      //meme
         Matrix<int> matrix_6(TEST2_SIZE,TEST2_RAND_PARAMS[5]);      //complete
-
+        time=benchmark_mark();
         
         for (int i=1; i<TEST2_NUM_TESTS+1; i++) {
             // Mem leak like a mofo without deconstructor
@@ -169,6 +175,7 @@ int rands() {
         std::cerr << e.what() << '\n';
         return 1;
     }
+    printf("Ran in %d\n",time);
 
     //Exit with success
     return 0;
