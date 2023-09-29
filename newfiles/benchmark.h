@@ -18,6 +18,11 @@ void benchmark_end(){
     end = std::chrono::high_resolution_clock::now();
 }
 
+int benchmark_mark() {
+    benchmark_end();
+    return std::chrono::duration_cast<std::chrono::microseconds>(end - start).count();
+}
+
 //print our benchmark times
 void benchmark_print(){
     std::cout << "Time between start and end: " << std::chrono::duration_cast<std::chrono::microseconds>(end - start).count() << " microseconds\n";

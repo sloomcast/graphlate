@@ -1,4 +1,5 @@
 #include "matrix.h"
+#include "benchmark.h"
 #include <string>
 using namespace std;
 
@@ -182,10 +183,11 @@ int mults() {
     for(int i=0; i<TEST3_NUM_TESTS; i++) {
         // Init matrices
         // START BENCHMARK HERE
+        benchmark_start();
         Matrix<int> matrix_1(TEST3_SIZES[i],4);
         Matrix<int> matrix_2(TEST3_SIZES[i],7); // Multiply against an identity for easy visual check
         Matrix<int> matrix_3 = matrix_1 * matrix_2;
-        time=0; // OWEN THIS IS WHERE YOU INSERT THE RESULT OF THE BENCHMARK
+        time=benchmark_mark();
         // END BENCHMARK
 
         printf("Case %d:\t%dX%d\n",i,i,i);
