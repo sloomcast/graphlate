@@ -435,6 +435,67 @@ class Matrix{
         }
     }
 
+    //EFFECTS:  Returns a reduced row echelon form matrix of the matrix pointed to by this
+    Matrix<double> rref(){
+        Matrix<double> to_return(this->matrix_dimension(),8);
+        to_return.copy_vals(*this);
+
+        //forward elimination
+        for(int i=0; i<this->matrix_dimension()-1; i++){
+            if(!is_nonzero(to_return.return_row(i))) continue;
+            for(int j=i+1; j<this->matrix_dimension(); j++){
+                //gets ratio
+                double ratio = (double)to_return(j,i) / to_return(i,i);
+                for(int k=i; k<this->matrix_dimension(); k++){
+                    //does operations
+                    to_return.set(j,k,round(to_return(j,k) - ratio * to_return(i,k)));
+                }
+            }
+        }
+
+        //backward operations
+        for(int i=to_return.matrix_dimension()-1; i>0; i--){
+            if(!is_nonzero(to_return.return_row(i))) continue;
+
+            //gets position of lead
+            int pos = pivot(to_return.return_row(i));
+
+            //divide row to get a 1
+            to_return.divide_row_by(i, to_return(i,pos));
+
+            //do subtractions
+            for(int j=i-1; j>=0; j--){
+                double ratio = to_return(j, pos) / to_return(i,pos);
+
+                for(int k=pos; k<to_return.matrix_dimension(); k++){
+                    to_return.set(j,k,to_return(j,k) - ratio * to_return(i,k));
+                }
+            }
+        }
+        //top row
+        to_return.divide_row_by(0,to_return(0,0));
+
+        return to_return;
+    }
+
+    //EFFECTS: copies the contents of the parameter into the matrix
+    template <typename J>
+    void copy_vals(Matrix<J> &from){
+        for(int i=0; i<this->matrix_dimension(); i++){
+            for(int j=0; j<this->matrix_dimension(); j++){
+                (*this).set(i,j,from(i,j));
+            }
+        }
+    }
+
+    //MODIFIES: this matrix
+    //EFFECTS:  divides each element in row by ratio
+    void divide_row_by(int row, double ratio){
+        for(int i=0; i<this->matrix_dimension(); i++){
+            this->set(row,i,0.0 + (*this)(row,i) / ratio);
+        }
+    }
+
     protected:
     int dimensions;
     T data[MAX_DIMENSION*MAX_DIMENSION];
@@ -470,6 +531,31 @@ class Matrix{
             }
         }
         return m1;
+    }
+
+    //REQUIRES: l1 is a valid non-empty list
+    //EFFECTS:  returns true if the column (list) passed to it is non-zero
+    bool is_nonzero(std::list<double> l1){
+        for(auto i=l1.begin(); i != l1.end(); i++){
+            if(*i != 0) return true;
+        }
+        return false;
+    }
+
+    int pivot(std::list<double> l1){
+        int index = 0;
+        for(auto i=l1.begin(); i != l1.end(); i++){
+            if(*i != 0){
+                break;
+            }
+            index++;
+        }
+        return index;
+    }
+
+    double round(double d){
+        double val = (int)(d * 1000 + 0.5);
+        return (double) val / 1000;
     }
 };
 

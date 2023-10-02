@@ -16,6 +16,7 @@ bool determinant_tests();
 bool add_tests();
 bool mult_tests();
 void benchmarking();
+bool rref_tests();
 
 int main(){
     bool all_pass = true;
@@ -113,8 +114,17 @@ int main(){
         all_pass = false;
     }
 
+    //test rref
+    if(rref_tests()){
+        cout << "RREF TESTS PASSED\n\n";
+    }
+    else{
+        cout << "RREF TESTS FAILED YOU NINCOMPOOP\n\n";
+        all_pass = false;
+    }
+
     //benchmark tests
-    benchmarking();
+    //benchmarking();
 
     if(all_pass) cout << "ALL TESTS PASSED\n\n";
     else cout << "NOT ALL PASSED\n\n";
@@ -371,4 +381,35 @@ void benchmarking(){
         benchmark_print();
     }
     cout << "\n";
+}
+
+bool rref_tests(){
+    //declarations
+    Matrix<int> m1{4,1,7,1,8,3,1,1,1};
+    Matrix<int> m2{4,1,7,0,0,0,0,0,0};
+    Matrix<int> m3{1,1,1,1,1,1,2,2,2};
+    Matrix<int> m4{6,9,42,3};
+    Matrix<int> m5{69};
+
+    //operations
+    Matrix<double> op1 = m1.rref();
+    Matrix<double> op2 = m2.rref();
+    Matrix<double> op3 = m3.rref();
+    Matrix<double> op4 = m4.rref();
+    Matrix<double> op5 = m5.rref();
+
+    //if statements
+    Matrix<double> test1{1,0,0,0,1,0,0,0,1};
+    Matrix<double> test2{1,0.25,1.75,0,0,0,0,0,0};
+    Matrix<double> test3{1,1,1,0,0,0,0,0,0};
+    Matrix<double> test4{1,0,0,1};
+    Matrix<double> test5{1};
+    if(op1 != test1) return false;
+    if(op2 != test2) return false;
+    if(op3 != test3) return false;
+    if(op4 != test4) return false;
+    if(op5 != test5) return false;
+
+    //return
+    return true;
 }
