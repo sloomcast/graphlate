@@ -10,6 +10,7 @@
 #include "randos.h"
 #include "meme.h"
 #include "maths.h"
+#include "ffrac.h"
 
 const int MAX_DIMENSION = 100;
 bool debug_flag = false;

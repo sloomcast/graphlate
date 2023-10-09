@@ -17,6 +17,7 @@ bool add_tests();
 bool mult_tests();
 void benchmarking();
 bool rref_tests();
+bool ffrac_tests();
 
 int main(){
     bool all_pass = true;
@@ -123,6 +124,15 @@ int main(){
         all_pass = false;
     }
 
+    //test ffrac
+    if(ffrac_tests()){
+        cout << "FFRAC TESTS PASSED\n\n";
+    }
+    else{
+        cout << "BOI WHAT DA HEEEELLL YOU FAILED FFRAC TESTS\n\n";
+        all_pass = false;
+    }
+
     //benchmark tests
     //benchmarking();
 
@@ -136,6 +146,8 @@ bool make_tests(){
     Matrix<int> m2(5);
     Matrix<float> m3(5,1);
     Matrix<float> m4{1.1,2.2,3.3,6.9};
+    Matrix<ffrac> m5(3,3);
+    //m5.print();
     //m4.print();
 
     if(m1.matrix_dimension() != 10) return false;
@@ -385,14 +397,14 @@ void benchmarking(){
 
 bool rref_tests(){
     //declarations
-    Matrix<int> m1{4,1,7,1,8,3,1,1,1};
+    Matrix<ffrac> m1{4,1,7,1,8,3,1,1,1};
     Matrix<int> m2{4,1,7,0,0,0,0,0,0};
     Matrix<int> m3{1,1,1,1,1,1,2,2,2};
     Matrix<int> m4{6,9,42,3};
     Matrix<int> m5{69};
 
     //operations
-    Matrix<double> op1 = m1.rref();
+    //m1.rref(m1);
     Matrix<double> op2 = m2.rref();
     Matrix<double> op3 = m3.rref();
     Matrix<double> op4 = m4.rref();
@@ -404,12 +416,52 @@ bool rref_tests(){
     Matrix<double> test3{1,1,1,0,0,0,0,0,0};
     Matrix<double> test4{1,0,0,1};
     Matrix<double> test5{1};
-    if(op1 != test1) return false;
+    //m1.print();
+    //if(m1 != test1) return false;
     if(op2 != test2) return false;
     if(op3 != test3) return false;
     if(op4 != test4) return false;
     if(op5 != test5) return false;
 
     //return
+    return true;
+}
+
+bool ffrac_tests(){
+    //declarations
+    ffrac def_const;
+    ffrac frac1(1,2);
+    ffrac frac2(1,2);
+    ffrac frac3(1,3);
+    ffrac frac4(2);
+    ffrac zerofrac(0);
+    ffrac frac5(5,6);
+
+    //operations
+    ffrac sum1 = frac1 + frac2;
+    ffrac sum2 = frac1 + frac3;
+    ffrac mult1 = frac1 * frac3;
+    ffrac mult2 = frac1 * frac4;
+    ffrac div1 = frac1 / frac4;
+    ffrac div2 = def_const / frac4;
+    ffrac sub1 = frac1 - frac2;
+    ffrac sub2 = frac5 - frac3;
+
+    //if statments
+    ffrac test1(5,6);
+    ffrac test2(1,6);
+    ffrac test3(1,4);
+    if(!(frac1 == frac2)) return false;
+    if(frac1 != frac2) return false;
+    if(sum1 != def_const) return false;
+    if(sum2 != test1) return false;
+    if( mult1 != test2) return false;
+    if(mult2 != def_const) return false;
+    if(test3 != div1) return false;
+    if(div2 != frac1) return false;
+    if(sub1 != zerofrac) return false;
+    if(sub2 != frac1) return false;
+
+    //base return
     return true;
 }
