@@ -18,6 +18,7 @@ bool mult_tests();
 void benchmarking();
 bool rref_tests();
 bool ffrac_tests();
+bool komplete_tests();
 
 int main(){
     bool all_pass = true;
@@ -130,6 +131,15 @@ int main(){
     }
     else{
         cout << "BOI WHAT DA HEEEELLL YOU FAILED FFRAC TESTS\n\n";
+        all_pass = false;
+    }
+
+    //komplete graph tests
+    if(komplete_tests()){
+        cout << "DERIK'S CODE PASSED\n\n";
+    }
+    else{
+        cout << "DERIK CODE STINKY\n\n";
         all_pass = false;
     }
 
@@ -463,5 +473,20 @@ bool ffrac_tests(){
     if(sub2 != frac1) return false;
 
     //base return
+    return true;
+}
+
+bool komplete_tests(){
+    //initializations
+    Matrix<int> m1(6,6);
+    Matrix<int> m2(5,6);
+
+    //operations
+    Matrix<int> combined = combineGraphs(m1,m2);
+
+    //if statements
+    //combined.print();
+
+    //default
     return true;
 }
