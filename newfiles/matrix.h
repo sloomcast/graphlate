@@ -633,6 +633,7 @@ Matrix<int> complete_graph(int size){
     return new_mat;
 }
 
+//REQUIRES: size < MAX_DIMENSTIONS and the two matrices are complete graphs
 template <typename T>
 Matrix<T> addend_graphs(Matrix<T> &m1, Matrix<T> &m2){
     //new size and new matrix
