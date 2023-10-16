@@ -10,6 +10,10 @@ static inline int max(int a, int b) {
     return(a>b ? a : b);
 }
 
+static inline int min(int a, int b) {
+    return(a<b ? a : b);
+}
+
 // https://stackoverflow.com/questions/8965603/how-to-find-the-closest-value-of-2n-to-a-given-input
 unsigned twon(unsigned value) {
     unsigned above = (value - 1);

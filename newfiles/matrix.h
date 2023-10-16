@@ -560,29 +560,30 @@ class Matrix{
     }
 };
 
-
 // BASIC, BAD, TYPE-SPECIFIC
-void print_eq(Matrix<int> matrix_1, Matrix<int> matrix_2, Matrix<int> result, string oper) {
+void print_eq(Matrix<int> matrix_1, Matrix<int> matrix_2, Matrix<int> result, char oper) {
     int size1 = matrix_1.matrix_dimension();
     int size2 = matrix_2.matrix_dimension();
     int size3 = result.matrix_dimension();
 
-    if(size1 != size2 || size1 != size3 || size2 !=size3){  //Currently only working with square matrices, will only use size1 after this
-        printf("BAD. DON'T. STOP.\n");
-        return;
-    }
+    int largest = max(max(size1,size2),size3);
+    int smallest = min(min(size1,size2),size3);
 
     // Print each line top to bottom
-    for (int j=0; j<size1; j++) {                    
+    for (int j=0; j<largest; j++) {                    
         for(int k=0; k<size1; k++)//Print each value in the jth row for Matrix 1
         {
-            printf(" %d ",matrix_1(j,k));
+            if (j<size1) {
+                printf(" %d ",matrix_1(j,k));
+            } else{
+                printf("   ");
+            }
         }
         
         //If it's in the right spot, print a multiplication symbol
-        if(j == size1/2)
+        if(j == smallest/2)
         {
-            printf("\t%s\t",oper);
+            printf("\t%c\t",oper);
         }
         else //Else, don't
         {
@@ -590,13 +591,17 @@ void print_eq(Matrix<int> matrix_1, Matrix<int> matrix_2, Matrix<int> result, st
         }
     
         //Print each value in the jth row for for Matrix 2
-        for(int k=0; k<size1; k++)
+        for(int k=0; k<size2; k++)
         {
-           printf(" %d ",matrix_2(j,k));
+            if(j<size2) {
+                printf(" %d ",matrix_2(j,k));
+            } else {
+                printf("   ");
+            }
         }
     
         //If it's in the right spot, print the equals symbol
-        if(j == size1/2)
+        if(j == smallest/2)
         {
             printf("\t=\t");
         }
@@ -606,9 +611,13 @@ void print_eq(Matrix<int> matrix_1, Matrix<int> matrix_2, Matrix<int> result, st
         }
 
         //Print each value in the jth row for the result matrix
-        for(int k=0; k<size1; k++)
+        for(int k=0; k<size3; k++)
         {
-            printf(" %d ",result(j,k));
+            if (j<size3) {
+                printf(" %d ",result(j,k));
+            } else {
+                printf("   ");
+            }
         }
         printf("\n");
     }
@@ -625,7 +634,7 @@ Matrix<int> complete_graph(int size){
 }
 
 template <typename T>
-Matrix<T> combineGraphs(Matrix<T> &m1, Matrix<T> &m2){
+Matrix<T> addend_graphs(Matrix<T> &m1, Matrix<T> &m2){
     //new size and new matrix
     int new_size = m1.matrix_dimension() + m2.matrix_dimension();
     Matrix<T> new_mat(new_size);

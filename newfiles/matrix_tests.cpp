@@ -484,7 +484,7 @@ bool komplete_tests(){
     Matrix<int> m2(5,6);
 
     //operations
-    Matrix<int> combined = combineGraphs(m1,m2);
+    Matrix<int> combined = addend_graphs(m1,m2);
 
     //if statements
     //combined.print();

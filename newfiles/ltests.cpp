@@ -41,8 +41,8 @@ const int TEST5_NUM_TESTS = 3;
 const int TEST5_SIZES[TEST5_NUM_TESTS] = {2,4,6};
 
 // Test 6 Parameters
-const int TEST6_NUM_TESTS = 10;
-const int TEST6_SIZES[TEST6_NUM_TESTS] = {1,2,3,4,5,6,7,8,9,10};
+const int TEST6_NUM_TESTS = 4;
+const int TEST6_SIZES[TEST6_NUM_TESTS] = {2,4,6,8};
 
 // Wrapper for try/catch
 int try_get(char* argv,int def) {
@@ -229,7 +229,7 @@ int mults() {
         printf("Case %d:\t%dX%d\n",i+1,i+1,i+1);
         try
         {
-            print_eq(matrix_1,matrix_2,matrix_3,"X");
+            print_eq(matrix_1,matrix_2,matrix_3,'X');
         }
         catch(const std::exception& e)
         {
@@ -290,16 +290,27 @@ int matrix_funcs() {
         benchmark_start();
         res=matrix_1.determinant();
         time=benchmark_mark();
-        printf("Matrix 1 Determinant:   %d\n",matrix_1.determinant());
+        printf("Matrix 1 Determinant:\t%d\nFinished in:\t%d\n",matrix_1.determinant(),time);
         
         // Not simple determinant test
         benchmark_start();
         res=matrix_2.determinant();
         time=benchmark_mark();
-        printf("Matrix 2 Determinant:   %d\n",matrix_2.determinant());
+        printf("Matrix 2 Determinant:\t%d\nFinished in:\t%d\n",matrix_2.determinant(),time);
         
         printf("Simple addendum:\n");
         benchmark_start();
+        matrix_3 = addend_graphs(matrix_1,matrix_1);
+        time=benchmark_mark();
+        print_eq(matrix_1,matrix_1,matrix_3,'U');
+        printf("Finished in:\t%d\n",time);
+
+        printf("Fuck it up my guy:\n");
+        benchmark_start();
+        matrix_3 = addend_graphs(matrix_1,matrix_2);
+        time=benchmark_mark();
+        print_eq(matrix_1,matrix_2,matrix_3,'U');
+        printf("Finished in:\t%d\n",time);
     }
     return 0;
 }
