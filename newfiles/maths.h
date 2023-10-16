@@ -1,5 +1,6 @@
 #ifndef MATHS_H
 #define MATHS_H
+// AUTHOR:  LUCAS RIZZOLO
 // because I'm too lazy to import a whole package, here's mine
 
 // INPUT:   @param int a the first integer to compare

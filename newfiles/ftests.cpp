@@ -1,3 +1,4 @@
+// AUTHOR:  LUCAS RIZZOLO
 #include "newfiles/maths.h"
 #include <string>
 #include <iostream>

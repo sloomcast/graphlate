@@ -1,6 +1,9 @@
 #ifndef BENCHMARK_H
 #define BENCHMARK_H
 
+// AUTHOR:  OWEN DAVIS
+// EDITS:   LUCAS RIZZOLO
+
 #include "matrix.h"
 #include <chrono>
 

@@ -1,3 +1,5 @@
+// AUTHOR:  Owen Davis
+
 #include "matrix.h"
 #include "benchmark.h"
 #include <chrono>

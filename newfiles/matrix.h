@@ -562,7 +562,7 @@ class Matrix{
 
 
 // BASIC, BAD, TYPE-SPECIFIC
-void print_eq(Matrix<int> matrix_1, Matrix<int> matrix_2, Matrix<int> result) {
+void print_eq(Matrix<int> matrix_1, Matrix<int> matrix_2, Matrix<int> result, string oper) {
     int size1 = matrix_1.matrix_dimension();
     int size2 = matrix_2.matrix_dimension();
     int size3 = result.matrix_dimension();
@@ -582,7 +582,7 @@ void print_eq(Matrix<int> matrix_1, Matrix<int> matrix_2, Matrix<int> result) {
         //If it's in the right spot, print a multiplication symbol
         if(j == size1/2)
         {
-            printf("\tX\t");
+            printf("\t%s\t",oper);
         }
         else //Else, don't
         {
@@ -613,12 +613,6 @@ void print_eq(Matrix<int> matrix_1, Matrix<int> matrix_2, Matrix<int> result) {
         printf("\n");
     }
 };
-
-// BASIC, BAD, TYPE-SPECIFIC, MEME
-Matrix<int> mat_mult(Matrix<int> matrix_1, Matrix<int> matrix_2) {
-    Matrix<int> matrix(3,1);
-    return matrix;
-}
 
 //REQUIRES: size < MAX_DIMENSIONS
 //EFFECTS:  returns by value a complete graph matrix of the designated size
