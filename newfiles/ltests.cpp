@@ -13,10 +13,11 @@ int mults();
 int appending_complete();
 int appending_not_complete();
 int matrix_funcs();
+int big_test();
 
 // For modular code
-const int NUM_TESTS = 6;
-const char *TEST_NAMES[NUM_TESTS] = {"Printing", "Constructors", "Multiplication", "Complete Matrix Union", "Not-Complete Matrix Union","Matrix Functions"};
+const int NUM_TESTS = 7;
+const char *TEST_NAMES[NUM_TESTS] = {"Printing", "Constructors", "Multiplication", "Complete Matrix Union", "Not-Complete Matrix Union","Matrix Functions","Big Test"};
 
 // Test 1 Parameters
 const int TEST1_NUM_TESTS = 5;
@@ -43,6 +44,10 @@ const int TEST5_SIZES[TEST5_NUM_TESTS] = {2,4,6};
 // Test 6 Parameters
 const int TEST6_NUM_TESTS = 4;
 const int TEST6_SIZES[TEST6_NUM_TESTS] = {2,4,6,8};
+
+// Test 7 Parameters
+const int TEST7_NUM_TESTS = 1;
+const int TEST7_SIZES[TEST7_NUM_TESTS] = {50};
 
 // Wrapper for try/catch
 int try_get(char* argv,int def) {
@@ -112,6 +117,8 @@ int main(int argc, char** argv){
             case 5: val=appending_not_complete();   //Fifth test: can it not do complete matrices    
                 break;
             case 6: val=matrix_funcs();             //Sixth test: determinants and such
+                break;
+            case 7: val=big_test();                 //Seventh test: big boy
                 break;
             default: val=-1;                        //Unimplemented
                 break;
@@ -278,9 +285,11 @@ int matrix_funcs() {
         time = 0 ;
         // Init Matrices of the right sizes
         printf("Case %d:\t%dX%d\n",i+1,i+1,i+1);
-        Matrix<int> matrix_1(TEST6_SIZES[i],6);
-        Matrix<int> matrix_2(TEST6_SIZES[i],4);
-        Matrix<int> matrix_3(TEST6_SIZES[i]*2,8);
+        Matrix<int> matrix_1(TEST6_SIZES[i],6); // complete graph
+        Matrix<int> matrix_2(TEST6_SIZES[i],4); // naturals
+        Matrix<int> matrix_3(TEST6_SIZES[i]*2,8); // to put addendum in
+
+        // Print the matrices
         printf("Matrix 1:\n");
         matrix_1.print();
         printf("Matrix 2:\n");
@@ -298,6 +307,7 @@ int matrix_funcs() {
         time=benchmark_mark();
         printf("Matrix 2 Determinant:\t%d\nFinished in:\t%d\n",matrix_2.determinant(),time);
         
+        // Test the simple addendum of two complete graphcs
         printf("Simple addendum:\n");
         benchmark_start();
         matrix_3 = addend_graphs(matrix_1,matrix_1);
@@ -305,12 +315,46 @@ int matrix_funcs() {
         print_eq(matrix_1,matrix_1,matrix_3,'U');
         printf("Finished in:\t%d\n",time);
 
-        printf("Fuck it up my guy:\n");
-        benchmark_start();
-        matrix_3 = addend_graphs(matrix_1,matrix_2);
-        time=benchmark_mark();
-        print_eq(matrix_1,matrix_2,matrix_3,'U');
-        printf("Finished in:\t%d\n",time);
+        // Test it in a way that shouldn't work
+        //printf("Fuck it up my guy:\n");
+        //benchmark_start();
+        //matrix_3 = addend_graphs(matrix_1,matrix_2);
+        //time=benchmark_mark();
+        //print_eq(matrix_1,matrix_2,matrix_3,'U');
+        //printf("Finished in:\t%d\n",time);
+    }
+    return 0;
+}
+
+int big_test() {
+    int time,time_print;
+    for(int i=0; i<TEST7_NUM_TESTS; i++) {
+        time=0;
+        time_print=0;
+        try
+        {
+            // Time build and print
+            printf("Matrix 1:\n");
+            benchmark_start();
+            Matrix<int> matrix_1(TEST7_SIZES[i],6);
+            time = benchmark_mark();
+            matrix_1.print();
+            time_print=benchmark_mark();
+            printf("Built in \t%d\nPrinted in \t%d\n",time,time_print);
+
+            // Dirty time multiply and print
+            benchmark_start();
+            Matrix<int> matrix_2 = matrix_1 * matrix_1;
+            time=benchmark_mark();
+            printf("Done in\t%d",time);
+        }
+        catch(const std::exception& e)
+        {
+            std::cerr << e.what() << '\n';
+            return -1;
+        }
+
+        
     }
     return 0;
 }
