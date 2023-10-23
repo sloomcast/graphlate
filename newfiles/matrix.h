@@ -497,7 +497,7 @@ class Matrix{
         }
     }
 
-    protected:
+    private:
     int dimensions;
     T data[MAX_DIMENSION*MAX_DIMENSION];
 
