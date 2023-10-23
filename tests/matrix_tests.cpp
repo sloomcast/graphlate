@@ -1,5 +1,5 @@
-#include "matrix.h"
-#include "benchmark.h"
+#include "src/matrix.h"
+#include "src/benchmark.h"
 #include <chrono>
 
 using namespace std;
