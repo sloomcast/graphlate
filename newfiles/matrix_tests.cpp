@@ -21,9 +21,19 @@ void benchmarking();
 bool rref_tests();
 bool ffrac_tests();
 bool komplete_tests();
+bool dynamic_tests();
 
 int main(){
     bool all_pass = true;
+
+    //dynamic tests
+    if(dynamic_tests()){
+        cout << "DYNAMIC WORKS!\n\n";
+    }
+    else{
+        cout << "BADBADBADBAD DYNAMIC BAD\n\n";
+        all_pass = false;
+    }
 
     //make a matrix
     if(make_tests()){
@@ -490,5 +500,18 @@ bool komplete_tests(){
     //combined.print();
 
     //default
+    return true;
+}
+
+bool dynamic_tests(){
+    //destructor
+    Matrix<int> m1(1024);
+
+    //m1.print();
+
+    //copy ctor
+    Matrix<int> m2(m1);
+    if(&m1 == &m2) return false;
+
     return true;
 }

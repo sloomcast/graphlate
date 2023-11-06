@@ -12,7 +12,7 @@
 #include "maths.h"
 #include "ffrac.h"
 
-const int MAX_DIMENSION = 100;
+const int MAX_SIZE = 1024;
 bool debug_flag = false;
 
 template <typename T>
@@ -30,8 +30,10 @@ class Matrix{
     Matrix(int size = 10, int flavor = 5) { //defaults to meme flavor
         //error handling
         if((flavor < 1 || flavor > 7) && flavor != 8)throw std::invalid_argument("ERROR: Please enter a matrix fill designation between 1-7");
+        if(size > MAX_SIZE) throw std::invalid_argument("ERROR: Requested matrix size is too large, maximum size is 1024");
 
         dimensions = size;
+        data = new T[size*size];
         this->fill_by_option(flavor);
     }
 
@@ -42,6 +44,8 @@ class Matrix{
         if(double(s2) != s1) throw std::invalid_argument("ERROR: Initializer list must be a 1D square matrix");
 
         dimensions = sqrt(il.size());  //set size
+        if(dimensions > MAX_SIZE) throw std::invalid_argument("ERROR: Requested matrix size is too large, maximum size is 1024");
+        data = new T[dimensions*dimensions];
 
         for(int r=0; r<dimensions; ++r){
             for(int c=0; c<dimensions; ++c){
@@ -50,8 +54,35 @@ class Matrix{
         }
     }
 
+    //copy constructor
+    Matrix(const Matrix& other){
+        dimensions = other.matrix_dimension();
+        if(dimensions > MAX_SIZE) throw std::invalid_argument("ERROR: Requested matrix size is too large, maximum size is 1024");
+        data = new T[dimensions*dimensions];
+
+        //copy values
+        this->copy_mat(other);
+    }
+
+    //overloaded deep copy operator
+    Matrix& operator=(const Matrix &other){
+        if(this == &other){
+            return *this;
+        }
+
+        //clears matrix
+        this->clear_matrix();
+
+        //copies new vals
+        dimensions = other.matrix_dimension();
+        data = new T[dimensions*dimensions];
+        this->copy_mat(other);
+
+        return *this;
+    }
+
     //EFFECTS:  returns the width/height of the matrix
-    int matrix_dimension() {
+    int matrix_dimension() const{
         return dimensions;
     }
 
@@ -160,12 +191,12 @@ class Matrix{
         return !(*this == rhs);
     }
 
-    T operator()(int num1, int num2){
+    T operator()(int num1, int num2) const{
         //error handling
         if(num1 < 0 || num1 >= dimensions) throw std::invalid_argument("ERROR: Invalid row value");
         if(num2 < 0 || num2 >= dimensions) throw std::invalid_argument("ERROR: Invalid column value");
 
-        return *(this->matrix_at(num1,num2));
+        return this->get(num1,num2);
     }
 
     Matrix<T> operator+(Matrix<T> &rhs){
@@ -354,7 +385,7 @@ class Matrix{
                         break;
                     case 7: data[column*dimensions+row]= column==row ? 1 : 0;
                         break;
-                    default: data[column*dimensions+row] = 0;
+                    default: data[column*dimensions+row]= 0;
                         break;
                 }
             }
@@ -408,6 +439,17 @@ class Matrix{
         if(col < 0 || col >= dimensions) throw std::invalid_argument("ERROR: Invalid column value");
 
         *(this->matrix_at(row,col)) = val;
+    }
+
+    //REQUIRES: 0 <= row, col < dimensions
+    //EFFECTS:  gets the value at (row,col)
+    T get(int row, int col) const{
+        //error handling
+        if(row < 0 || row >= dimensions) throw std::invalid_argument("ERROR: Invalid row value");
+        if(col < 0 || col >= dimensions) throw std::invalid_argument("ERROR: Invalid column value");
+
+        int index = row*dimensions + col;
+        return data[index];
     }
 
     //REQUIRES: node1, node2 are valid location on the matrix
@@ -497,9 +539,25 @@ class Matrix{
         }
     }
 
+    ~Matrix(){
+        clear_matrix();
+    }
+
     private:
     int dimensions;
-    T data[MAX_DIMENSION*MAX_DIMENSION];
+    T* data;
+
+    void clear_matrix(){
+        delete[] data;
+    }
+
+    void copy_mat(const Matrix &other){
+        for(int i=0; i<other.matrix_dimension(); i++){
+            for(int j=0; j<other.matrix_dimension(); j++){
+                this->set(i,j,other(i,j));
+            }
+        }
+    }
 
     //REQUIRES: 0 <= row,col <= dimensions
     //EFFECTS:  returns by reference the value stored at row,col
