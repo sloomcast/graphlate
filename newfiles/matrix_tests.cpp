@@ -418,12 +418,17 @@ void benchmarking(){
 }
 
 bool rref_tests(){
+    //benchmarking
+    benchmark_start();
+
     //declarations
     Matrix<ffrac> m1{4,1,7,1,8,3,1,1,1};
     Matrix<int> m2{4,1,7,0,0,0,0,0,0};
     Matrix<int> m3{1,1,1,1,1,1,2,2,2};
     Matrix<int> m4{6,9,42,3};
     Matrix<int> m5{69};
+    //stress test
+    //Matrix<int> m6(10000);
 
     //operations
     //m1.rref(m1);
@@ -431,6 +436,7 @@ bool rref_tests(){
     Matrix<double> op3 = m3.rref();
     Matrix<double> op4 = m4.rref();
     Matrix<double> op5 = m5.rref();
+    //Matrix<double> op6 = m6.rref();
 
     //if statements
     Matrix<double> test1{1,0,0,0,1,0,0,0,1};
@@ -444,6 +450,8 @@ bool rref_tests(){
     if(op3 != test3) return false;
     if(op4 != test4) return false;
     if(op5 != test5) return false;
+
+    std::cout << benchmark_mark() << "\n\n";
 
     //return
     return true;
@@ -504,6 +512,9 @@ bool komplete_tests(){
 }
 
 bool dynamic_tests(){
+    //benchmarking
+    benchmark_start();
+
     //destructor
     Matrix<int> m1(1024);
 
@@ -512,6 +523,16 @@ bool dynamic_tests(){
     //copy ctor
     Matrix<int> m2(m1);
     if(&m1 == &m2) return false;
+    if(m1 != m2) return false;
+
+    //overloaded =
+    Matrix<int> m3;
+    m3 = m1;
+    if(&m1 == &m3) return false;
+    if(m1 != m3) return false;
+
+    //benchmarking
+    std::cout << benchmark_mark() << "\n\n";
 
     return true;
 }

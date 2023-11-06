@@ -12,7 +12,7 @@
 #include "maths.h"
 #include "ffrac.h"
 
-const int MAX_SIZE = 1024;
+const int MAX_SIZE = 10000;
 bool debug_flag = false;
 
 template <typename T>
