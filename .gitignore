@@ -55,7 +55,6 @@ Mkfile.old
 dkms.conf
 
 .vscode
-Makefile
 makefile
 .DS_Store
 /Menu
